@@ -22,48 +22,26 @@ namespace Task4
             _flatPhone = GetData<string>("Input flat phone");
         }
 
-        public void CreateXML()
+        public void CreateXML(string filename)
         {
-            XElement personNode = new XElement("Person");
-            XElement addressNode = new XElement("Address");
-            XElement phonesNode = new XElement("Phones");
-            XElement streetNameNode = new XElement("Street");
-            XElement houseNumberNode = new XElement("HouseNumber");
-            XElement flatNumberNode = new XElement("FlatNumber");
-            XElement mobilePhoneNumber = new XElement("MobliePhone");
-            XElement flatPhoneNumber = new XElement("FlatPhone");
-
-            personNode.SetAttributeValue("name", _name);
-            
-            streetNameNode.SetValue(_streetName);
-            houseNumberNode.SetValue(_homeNumber);
-            flatNumberNode.SetValue(_flatNumber);
-            
-            addressNode.Add(streetNameNode);
-            addressNode.Add(houseNumberNode);
-            addressNode.Add(flatNumberNode);
-            
-            mobilePhoneNumber.SetValue(_mobilePhone);
-            flatPhoneNumber.SetValue(_flatPhone);
-            
-            phonesNode.Add(mobilePhoneNumber);
-            phonesNode.Add(flatPhoneNumber);
-
-            personNode.Add(addressNode);
-            personNode.Add(phonesNode);
-            
-            personNode.Save("test.xml");
+            XElement streetNameNode = new XElement("Street", _streetName);
+            XElement houseNumberNode = new XElement("HouseNumber", _homeNumber);
+            XElement flatNumberNode = new XElement("FlatNumber", _flatNumber);
+            XElement mobilePhoneNumber = new XElement("MobliePhone", _mobilePhone);
+            XElement flatPhoneNumber = new XElement("FlatPhone", _flatPhone);
+            XElement addressNode = new XElement("Address", streetNameNode, houseNumberNode, flatNumberNode);
+            XElement phonesNode = new XElement("Phones", mobilePhoneNumber, flatPhoneNumber);
+            XElement personNode = new XElement("Person", new XAttribute("name", _name), addressNode, phonesNode);
+            personNode.Save(filename);
         }
         
         private T GetData<T>(string message)
         {
-            T data;
             Console.WriteLine(message);
             for (;;) {
                 try
                 {
-                    data = (T) Convert.ChangeType(Console.ReadLine(), typeof(T));
-                    return data;
+                    return (T) Convert.ChangeType(Console.ReadLine(), typeof(T));
                 }
                 catch (FormatException e)
                 {

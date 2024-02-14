@@ -6,7 +6,7 @@
         {
             Contact contact = new Contact();
             contact.CompleteData();
-            contact.CreateXML();
+            contact.CreateXML("test.xml");
         }
     }
 }
